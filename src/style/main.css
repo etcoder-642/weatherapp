@@ -1,0 +1,155 @@
+* {
+    font-family: Poppins;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;    
+}
+
+body {
+    background-color: rgb(56, 55, 55);
+    color: white;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+input {
+    display: block;
+    margin: 12px 16px;
+    padding: 8px 16px;
+    outline-style: none;
+    border: none;
+    border-radius: 24px;
+    width: 60%;
+}
+
+button {
+    border: none;
+    outline: none;
+    border-radius: 24px;
+    min-width: 96px;
+    padding: 8px;
+}
+
+button:hover {
+    background-color: white;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-header {
+    width: 70%;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content:space-around;
+    margin: 32px 0;
+}
+
+.theme-mode {
+    display:flex;
+    justify-content: space-around;
+    gap: 4px;
+    border: 2px solid white;
+    padding: 6px;
+    border-radius: 8px;
+    width: 20%;
+}
+
+.cel-mode, .fahr-mode {
+    width: 50%;
+    background-color: white;
+    color: black;
+    padding: 4px;
+    border-radius: 6px;
+    text-align: center;
+}
+.cel-mode:hover, .fahr-mode:hover {
+    background-color: rgb(126, 125, 125);
+    color: white;
+}
+
+.main-header {
+    font-size: calc(124px + 2vw + 2vh);
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+}
+
+.weather-info {
+    font-size: 26px;
+    margin-bottom: 12px;
+
+}
+
+.temp-info {
+    display: flex;
+    gap: 12px;
+}
+
+.temp-info > div {
+    border: 2px solid white;
+    border-radius: 5px;
+    padding: 8px;
+    min-width: 112px;
+}
+
+.temp-info > div > header {
+    font-size: 56px;
+}
+
+.card-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 220px));
+    grid-auto-rows: fit-content;
+    width: 70%;
+}
+
+.card-header {
+    grid-column: 1/ -1;
+    padding: 12px;
+    font-size: 32px;
+}
+
+.date-card {
+    grid-column: 1 /-1;
+}
+
+.date-card > select {
+    width: 100%;
+}
+
+.card {
+    border: 2px solid white;
+    padding: 12px;
+    padding-bottom: 48px;
+    margin: 16px 4px;
+    width: 200px;
+}
+
+.card > header {
+    font-size: 24px;
+}
+
+select {
+    padding: 4px 12px;
+    outline: none;
+    border: none;
+}
