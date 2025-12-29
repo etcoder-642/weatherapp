@@ -1,71 +1,65 @@
-import "./style/main.css"
+import { display } from "./display";
+import "./style/main.css";
+import { logic } from "./app";
+import { utils } from "./utils";
 
-
-const btnFind = document.querySelector('.btn-find');
-const inputFind = document.querySelector('.location-find');
-const mainHeader = document.querySelector('.main-header');
-const minTemp = document.querySelector('.min-temp');
-const maxTemp = document.querySelector('.max-temp');
-const weatherInfo = document.querySelector('.weather-info');
 const dateInfo = document.querySelector('.date-info');
-const wsInfo = document.querySelector('.ws-info');
-const uvInfo = document.querySelector('.uv-info');
-const humidityInfo = document.querySelector('.humidity-info');
-const tflInfo = document.querySelector('.tfl-info');
-const celModeInfo = document.querySelector('.cel-mode');
-const fahrModeInfo = document.querySelector('.fahr-mode');
+const inputFind = document.querySelector('.location-find');
 
 let celMode = true;
+let currentData = null;
+display.celMode();
 
-celModeInfo.addEventListener('click', ()=>{
-    celMode = true;
-})
+const service = (() => {
+    const options = dateInfo.options;
 
-fahrModeInfo.addEventListener('click', ()=>{
-    celMode = false;
-})
-
-const mainFunc = ()=>{
-
-    if(!inputFind.value){
-        alert("Oops! you haven't entered any value.")
-    }else{
-        async function weatherData(){
-            const response = await fetch(
-                        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${inputFind.value}?key=2RKJTWVEYAP5AR2JLV6P837NG`,
-                {mode: "cors"},
-            );      
-            const responseData = await response.json();      
-            console.log(responseData);
-
-            const options = dateInfo.options;
-            for(let i =0; i<options.length; i++){
-                options[i].textContent = responseData.days[i].datetime;
+    return {
+        updateData: function (responseData, bool) {
+            const selectedIndex = options.selectedIndex;
+            display.updateWeatherInfo(responseData, selectedIndex);
+            display.updateAddress(responseData);
+            if (bool) {
+                display.celMode();
+                display.fahrModeReset();
+                display.updateTempInfo(utils.fahrToCels, responseData, selectedIndex);
+            } else {
+                display.fahrMode();
+                display.celModeReset();
+                display.updateTempInfo(utils.remainFahr, responseData, selectedIndex);
             }
-
-            const displayInfo = ()=>{
-               const selectedIndex = options.selectedIndex;
-               console.log(selectedIndex);
-               function FahrtoCels(Fahr){
-                return (Fahr-32)* (5/9);
-               };
-               mainHeader.textContent = celMode ? `${FahrtoCels(responseData.days[selectedIndex].temp).toFixed(2)}°C`: `${responseData.days[selectedIndex].temp}°F`;
-               minTemp.textContent = celMode ? `${FahrtoCels(responseData.days[selectedIndex].tempmin).toFixed(2)}°C`: `${responseData.days[selectedIndex].tempmin}°F`;
-               maxTemp.textContent = celMode ? `${FahrtoCels(responseData.days[selectedIndex].tempmax).toFixed(2)}°C`: `${responseData.days[selectedIndex].tempmax}°F`;
-               weatherInfo.textContent = responseData.days[selectedIndex].conditions;
-               document.querySelector('address').textContent = responseData.resolvedAddress;
-               wsInfo.textContent = responseData.days[selectedIndex].windspeed;
-               uvInfo.textContent = responseData.days[selectedIndex].uvindex;
-               humidityInfo.textContent = responseData.days[selectedIndex].humidity;
-               tflInfo.textContent = responseData.days[selectedIndex].feelslike;                
-            };
-
-            dateInfo.addEventListener('change', displayInfo);
-            displayInfo();             
+        },
+        mainFunc: async function (bool) {
+            if (!inputFind.value) {
+                display.alertMessage();
+            } else {
+                const responseData = await logic.response(inputFind.value);
+                display.fillDate(responseData);
+                currentData = responseData;
+                service.updateData(responseData, bool);
+            }
         }
-        weatherData();
     }
-};
+})()
 
-btnFind.addEventListener('click', mainFunc);
-inputFind.addEventListener('submit', mainFunc);
+
+dateInfo.addEventListener('change', () => { if (currentData) service.updateData(currentData, celMode) });
+
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cel-mode')) {
+        celMode = true;
+        display.celMode();
+        display.fahrModeReset();
+        if(currentData) service.updateData(currentData, celMode);
+    } else if (e.target.classList.contains('fahr-mode')) {
+        celMode = false;
+        display.fahrMode();
+        display.celModeReset();
+        if(currentData) service.updateData(currentData, celMode);
+    } else if (e.target.classList.contains('btn-find')) { service.mainFunc(celMode) };
+});
+
+inputFind.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        service.mainFunc(celMode);
+    }
+});

@@ -81,9 +81,10 @@ button:hover {
     border-radius: 6px;
     text-align: center;
 }
-.cel-mode:hover, .fahr-mode:hover {
-    background-color: rgb(126, 125, 125);
-    color: white;
+
+.mode-active, .cel-mode:hover, .fahr-mode:hover {
+    background-color: rgb(116, 114, 114);
+    color: rgb(255, 253, 253);
 }
 
 .main-header {
