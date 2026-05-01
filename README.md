@@ -20,6 +20,11 @@ No frameworks are used. All logic runs entirely in the browser.
 
 ---
 
+## Visual Demo
+
+<img width="1808" height="885" alt="image" src="https://github.com/user-attachments/assets/1adde82f-6965-458a-b0e2-59c145bfcfca" />
+
+
 ## Project Structure
 
 ```
