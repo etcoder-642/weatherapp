@@ -21,6 +21,9 @@ export const display = (() => {
                 options[i].textContent = responseData.days[i].datetime;
             }
         },
+        showContent: function() {
+            document.querySelector('.content').classList.remove('hidden');
+        },
         celMode: function () {
             celMode.classList.add('mode-active');
         },
@@ -41,12 +44,12 @@ export const display = (() => {
             minTemp.textContent = callback(responseData.days[index].tempmin);
             maxTemp.textContent = callback(responseData.days[index].tempmax);
         },
-        updateWeatherInfo: function(responseData, index) {
+        updateWeatherInfo: function(callback, responseData, index) {
             weatherInfo.textContent = responseData.days[index].conditions;
-            wsInfo.textContent = responseData.days[index].windspeed;
+            wsInfo.textContent = `${responseData.days[index].windspeed} mph`;
             uvInfo.textContent = responseData.days[index].uvindex;
-            humidityInfo.textContent = responseData.days[index].humidity;
-            tflInfo.textContent = responseData.days[index].feelslike;
+            humidityInfo.textContent = `${responseData.days[index].humidity}%`;
+            tflInfo.textContent = callback(responseData.days[index].feelslike);
         },
         updateAddress: (responseData) => {
             document.querySelector('address').textContent = responseData.resolvedAddress;

@@ -16,15 +16,16 @@ const service = (() => {
     return {
         updateData: function (responseData, bool) {
             const selectedIndex = options.selectedIndex;
-            display.updateWeatherInfo(responseData, selectedIndex);
             display.updateAddress(responseData);
             if (bool) {
                 display.celMode();
                 display.fahrModeReset();
+                display.updateWeatherInfo(utils.fahrToCels, responseData, selectedIndex);
                 display.updateTempInfo(utils.fahrToCels, responseData, selectedIndex);
             } else {
                 display.fahrMode();
                 display.celModeReset();
+                display.updateWeatherInfo(utils.remainFahr, responseData, selectedIndex);
                 display.updateTempInfo(utils.remainFahr, responseData, selectedIndex);
             }
         },
@@ -36,6 +37,7 @@ const service = (() => {
                 display.fillDate(responseData);
                 currentData = responseData;
                 service.updateData(responseData, bool);
+                display.showContent();
             }
         }
     }
